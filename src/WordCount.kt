@@ -1,22 +1,33 @@
+import java.io.File
+import java.io.InputStream
+
 fun main(args: Array<String>) {
     // Read from a file and turn into a string. test.txt > allTheWords
-    val allTheWords="Hello there, my name is Fabio and I really like to play tennis, I'm just average player, but is important to me to improve my tennis!, so I practice a lot."
+    val inputStream: InputStream = File("test.txt").inputStream()
+    val allTheWords = inputStream.bufferedReader().use { it.readText() }
 
     // A list of all the words separated out
     val words = allTheWords
             .replace(".","")
             .replace(",","")
             .replace("!","")
+            .replace("\n"," ")
+            .replace("?","")
+            .replace("-","")
             .split(" ")
 
+    // Counted list of all words
     val wordMap = mutableMapOf<String, Int>()
 
     for (word in words) {
-        if (wordMap[word.toUpperCase()] == null){
-            wordMap[word.toUpperCase()] = 1
-        } else {
-            val wordCount = wordMap[word.toUpperCase()]!!
-            wordMap[word.toUpperCase()] = wordCount + 1
+        // Getting rid of empty Strings
+        if (word != "") {
+            if (wordMap[word.toUpperCase()] == null) {
+                wordMap[word.toUpperCase()] = 1
+            } else {
+                val wordCount = wordMap[word.toUpperCase()]!!
+                wordMap[word.toUpperCase()] = wordCount + 1
+            }
         }
     }
     //for (word in wordMap) {println(word)}
